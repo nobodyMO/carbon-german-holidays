@@ -89,10 +89,18 @@ class CarbonGermanHolidays extends Carbon
      */
     public function isGermanHoliday($states = self::ALL_STATES)
     {
-        $holidays = self::getHolidays($this->year, $states);
+        $holidays = self::getHolidays($this->year, $states,$this->tzName);
 
-        return in_array($this->startOfDay(), $holidays, true);
+        return $this->inArray($this->startOfDay(), $holidays, true);
     }
+
+    public function inArray ($needle, $anArray, $strict) {
+		foreach ($anArray as $row) {
+			if ($row==$needle) return true;
+		}
+		return false;
+	}
+
 
     /**
      * Returns an array with the names of the German holidays for current Carbon instance
@@ -103,7 +111,7 @@ class CarbonGermanHolidays extends Carbon
      */
     public function getGermanHolidaysForDay($states = self::ALL_STATES)
     {
-        $holidays = self::getHolidays($this->year, $states);
+        $holidays = self::getHolidays($this->year, $states,$this->tzName);
 
         return array_keys($holidays, $this->startOfDay());
     }
@@ -131,8 +139,9 @@ class CarbonGermanHolidays extends Carbon
      *
      * @return array
      */
-    public static function getHolidays($year, $states = self::ALL_STATES)
+    public static function getHolidays($year, $states = self::ALL_STATES, $tz=null)
     {
+		if ($tz) date_default_timezone_set($tz);
         $holidays     = array();
         $easterSunday = self::getEasterSunday($year)->format('u');
 
