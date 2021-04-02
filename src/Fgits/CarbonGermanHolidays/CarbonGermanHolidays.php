@@ -126,7 +126,7 @@ class CarbonGermanHolidays extends Carbon
      */
     public static function getEasterSunday($year)
     {
-        $easter = self::createFromDate($year, 03, 21);
+        $easter = self::createFromDate($year, 03, 21)->startOfDay();
 
         return $easter->addDays(easter_days($year));
     }
@@ -143,7 +143,7 @@ class CarbonGermanHolidays extends Carbon
     {
 		if ($tz) date_default_timezone_set($tz);
         $holidays     = array();
-        $easterSunday = self::getEasterSunday($year)->format('u');
+        $easterSunday = self::getEasterSunday($year)->getTimestamp ();
 
         if ( ! is_array($states)) {
             $states = array($states);
